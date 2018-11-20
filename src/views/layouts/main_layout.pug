@@ -1,0 +1,27 @@
+include ../mixins/cdn_mixin
+include ../mixins/styles_mixin
+
+<!DOCTYPE html>
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    +styles('main')
+    title Inicia Aquí
+  body
+    block navbarContent
+      include ../components/navbar_component.pug
+
+    block bodyContent
+
+    block paginationContent
+
+    
+    block footerContent
+      include ../components/footer_component.pug
+
+    block scriptContent
+      +cdn('jquery')
+      +cdn('popper')
+      +cdn('bootstrap')

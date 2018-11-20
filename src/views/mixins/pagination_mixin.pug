@@ -1,0 +1,20 @@
+mixin pagination (page)
+  - const previous = page == 1 ? 'disabled' : '';
+  - const next = page == 3 ? 'disabled' : '';
+
+  section.container
+    .row
+      .col-12.box.shadow-sm
+        nav.d-flex.justify-content-center.align-items-center(
+          aria-label='Paginación de capítulos')
+          ul.pagination.mb-0
+            li.page-item(class=previous)
+              a.page-link(href='/') Anterior
+            li.page-item(class=`${page == 1 ? 'active' : ''}`)
+              a.page-link(href='/') 1
+            li.page-item(class=`${page == 2 ? 'active' : ''}`)
+              a.page-link(href='/cap/2.html') 2
+            li.page-item(class=`${page == 3 ? 'active' : ''}`)
+              a.page-link(href='/cap/3.html') 3
+            li.page-item(class=next)
+              a.page-link(href=`/cap/${page + 1}.html`) Siguiente

@@ -1,3 +1,4 @@
-.foo{
-  color: red
-}
+@import './bootstrap.scss';
+@import './components/navbar.scss';
+@import './elements/box.scss';
+@import './atomics.scss';

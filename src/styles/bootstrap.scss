@@ -1,0 +1,46 @@
+// ===============
+// Required
+// ===============
+
+@import '../../node_modules/bootstrap/scss/functions';
+@import '../../node_modules/bootstrap/scss/variables';
+@import '../../node_modules/bootstrap/scss/mixins';
+
+// ===============
+// Config
+// ===============
+
+// Layout
+$grid-gutter-width: 32px;
+$grid-breakpoints: ( xs: 0, md: 768px );
+$container-max-widths: (
+  // ⬇ Because the `max-width` of the page is 1024px
+  // ⬇ but `container` class add 15px of padding on the x axis
+  // ⬇ and its `box-sizing` is `border-box`
+  md: 15px + 15px + 1024px
+);
+
+// Color
+$body-bg: $gray-200;
+
+// Typo
+$h1-font-size:                $font-size-base * 1.75;
+$h2-font-size:                $font-size-base * 1.5;
+$h3-font-size:                $font-size-base * 1.25;
+$h4-font-size:                $font-size-base * 1.15;
+$h5-font-size:                $font-size-base;
+$h6-font-size:                $font-size-base;
+
+// ===============
+// Optional
+// ===============
+
+@import '../../node_modules//bootstrap/scss/reboot';
+@import '../../node_modules//bootstrap/scss/utilities';
+@import '../../node_modules/bootstrap/scss/type';
+@import '../../node_modules/bootstrap/scss/grid';
+@import '../../node_modules/bootstrap/scss/buttons';
+@import '../../node_modules/bootstrap/scss/pagination';
+@import '../../node_modules/bootstrap/scss/dropdown';
+
+// @import '../../node_modules/bootstrap/scss/bootstrap'

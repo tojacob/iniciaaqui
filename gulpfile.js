@@ -15,10 +15,11 @@ const autoprefixer = require('autoprefixer');
 
 const DIST = ['./docs'],
   DIST_ASSETS = './docs/assets',
-  DIST_STYLES = './src/assets/styles',
+  DIST_STYLES = './docs/assets/styles',
   SRC_ASSETS = ['./src/assets/'],
   SRC_VIEWS = ['./src/views/**/*.pug'],
-  SRC_STYLES = './src/styles/**/*.*',
+  MAIN_VIEWS = ['./src/views/pages/**/*.pug'],
+  SRC_STYLES = './src/styles/**/*.scss',
   MAIN_STYLES = './src/styles/main.scss';
 
 // ===============
@@ -38,7 +39,7 @@ gulp.task('assets-to-dist', function() {
 // Compile pug to html
 gulp.task('views', function() {
   return gulp
-    .src(SRC_VIEWS)
+    .src(MAIN_VIEWS)
     .pipe(pug())
     .pipe(gulp.dest(DIST[0]));
 });

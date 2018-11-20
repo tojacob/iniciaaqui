@@ -1,0 +1,7 @@
+mixin styles(name)
+  case name
+    when 'main'
+      link(rel="stylesheet", href="/assets/styles/main.css")
+    default
+      span(style="background-color: black; color: white;").
+        > [Estilos] '#{name}' no esta definido
