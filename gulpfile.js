@@ -1,103 +1,160 @@
 'use strict';
-const gulp = require('gulp');
-const pug = require('gulp-pug');
-const sass = require('gulp-sass');
-const sourcemaps = require('gulp-sourcemaps');
-const browserSync = require('browser-sync').create();
-const postcss = require('gulp-postcss');
-const del = require('del');
-const cssnano = require('cssnano');
-const autoprefixer = require('autoprefixer');
+const { src, dest, parallel, series, watch } = require('gulp'),
+  pug = require('gulp-pug'),
+  sass = require('gulp-sass'),
+  sourcemaps = require('gulp-sourcemaps'),
+  browserSync = require('browser-sync').create(),
+  postcss = require('gulp-postcss'),
+  del = require('del'),
+  cssnano = require('cssnano'),
+  autoprefixer = require('autoprefixer'),
+  babel = require('gulp-babel'),
+  uglifyjs = require('uglify-js'),
+  composer = require('gulp-uglify/composer'),
+  pump = require('pump'),
+  minify = composer(uglifyjs, console);
 
-// ===============
-// CONSTS
-// ===============
+// --------------------
+// FILES AND FOLDERS TO WORK
+// --------------------
+const files = {
+  dist: {
+    folder: './docs',
+    images: './docs/assets/images',
+    scripts: './docs/assets/scripts',
+    views: './docs/',
+    styles: './docs/assets/styles'
+  },
+  src: {
+    folder: './client/src',
+    images: './client/src/images/**/*.*',
+    scripts: './client/src/scripts/**/*.js',
+    views: './client/src/views/**/*.pug',
+    styles: './client/src/styles/**/*.scss'
+  },
+  main: {
+    views: './client/src/views/pages/**/*.pug',
+    styles: './client/src/styles/main.scss'
+  }
+};
 
-const DIST = ['./docs'],
-  DIST_ASSETS = './docs/assets',
-  DIST_STYLES = './docs/assets/styles',
-  SRC_ASSETS = ['./src/assets/'],
-  SRC_VIEWS = ['./src/views/**/*.pug'],
-  MAIN_VIEWS = ['./src/views/pages/**/*.pug'],
-  SRC_STYLES = './src/styles/**/*.scss',
-  MAIN_STYLES = './src/styles/main.scss';
-
-// ===============
+// ---------------
 // COMMON
-// ===============
+// ---------------
 
-// Clean dist folder before compile files
-gulp.task('clean-dist', function() {
-  return del(DIST);
-});
+// Clean dist before compile files
+function cleanDist() {
+  return del(files.dist.folder);
+}
 
-// Move content from 'src/assets' to 'dist/assets' folder
-gulp.task('assets-to-dist', function() {
-  return gulp.src(SRC_ASSETS).pipe(gulp.dest(DIST_ASSETS));
-});
+// Move content to dist
+function imagesToDist() {
+  return src(files.src.images).pipe(dest(files.dist.images));
+}
 
-// Compile pug to html
-gulp.task('views', function() {
-  return gulp
-    .src(MAIN_VIEWS)
+function scriptsToDist() {
+  return src(files.src.scripts).pipe(dest(files.dist.scripts));
+}
+
+// Compile pug pages
+function compileViews() {
+  return src(files.main.views)
     .pipe(pug())
-    .pipe(gulp.dest(DIST[0]));
-});
+    .pipe(dest(files.dist.views));
+}
 
-// ===============
+// --------------------
 // DEVELOPMENT
-// ===============
+// --------------------
 
 // Compile scss to css and add source map
-gulp.task('dev-styles', function() {
-  return gulp
-    .src(MAIN_STYLES)
+function devCompileStyles() {
+  return src(files.main.styles)
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest(DIST_STYLES))
+    .pipe(dest(files.dist.styles))
     .pipe(browserSync.stream());
-});
+}
 
-// Start local server, live reload and call others dev tasks
-gulp.task('dev-server', function() {
+// Start local server, live reload and watch files
+
+function devServer(cb) {
   browserSync.init({
-    server: DIST[0]
+    server: files.dist.folder
   });
 
-  gulp.watch(SRC_STYLES, gulp.parallel('dev-styles'));
-  gulp
-    .watch(SRC_VIEWS, gulp.parallel('views'))
-    .on('change', browserSync.reload);
-});
+  watch(files.src.styles, parallel(devCompileStyles));
 
-// Run development tasks
-gulp.task(
-  'dev',
-  gulp.series(
-    'clean-dist',
-    'assets-to-dist',
-    'views',
-    'dev-styles',
-    'dev-server'
-  )
-);
+  watch(files.src.views, parallel(compileViews)).on(
+    'change',
+    browserSync.reload
+  );
 
-// ===============
+  watch(files.src.scripts, parallel(scriptsToDist)).on(
+    'change',
+    browserSync.reload
+  );
+
+  return cb;
+}
+
+// Star development tast
+function dev() {
+  return series(
+    cleanDist,
+    imagesToDist,
+    scriptsToDist,
+    compileViews,
+    devCompileStyles,
+    devServer
+  );
+}
+
+// --------------------
 // PRODUCTION
-// ===============
+// --------------------
 
 // Compile scss to css, add prefixes and minify
-gulp.task('prod-styles', function() {
-  return gulp
-    .src(MAIN_STYLES)
+function prodCompileStyles() {
+  return src(files.main.styles)
     .pipe(sass().on('error', sass.logError))
     .pipe(postcss([autoprefixer(), cssnano({ preset: 'default' })]))
-    .pipe(gulp.dest(DIST_STYLES));
-});
+    .pipe(dest(files.dist.styles));
+}
 
-// Run production tasks
-gulp.task(
-  'prod',
-  gulp.series('clean-dist', 'assets-to-dist', 'views', 'prod-styles')
-);
+// Compile script ES6+ to ES5
+function prodCompileScripts(cb) {
+  const options = {};
+
+  pump(
+    [
+      src(files.src.scripts),
+      babel({
+        presets: ['@babel/env']
+      }),
+      minify(options),
+      dest(files.dist.scripts)
+    ],
+    cb
+  );
+}
+
+// Start production tasks
+function prod() {
+  return series(
+    cleanDist,
+    imagesToDist,
+    scriptsToDist,
+    compileViews,
+    prodCompileStyles,
+    prodCompileScripts
+  );
+}
+
+// --------------------
+// Export tasks
+// --------------------
+exports.dev = dev();
+exports.prod = prod();
+exports.default = dev();

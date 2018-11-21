@@ -1,0 +1,73 @@
+extends ../layouts/main_layout
+include ../mixins/cdn_mixin
+
+block bodyContent
+  section.container
+    .row
+      .col-12.box.shadow-sm: .contact-form
+
+        h2.mb-4 Contacto
+        p Hola, si deseas aprender más o tienes preguntas, puedes llenar el siguiente formulario.
+
+        hr
+
+        form#gform(
+          name='gform', 
+          enctype='text/plain', 
+          action='https://docs.google.com/forms/d/e/1FAIpQLScCT__nyGiBUIckm_xBjtYUKNPAg3PgNa0FLNsBbXlSR6KlsQ/formResponse?', 
+          target='hidden_iframe', 
+          data-to-validate='true',
+          novalidate)
+          .row: .col: .form-group
+                label.form-label(for='entry.285683292') Nombre*
+                input.form-control(
+                  name='entry.285683292',
+                  id='entry.285683292'
+                  type='text', 
+                  aria-describedby='nameHelp',
+                  data-to-check='name')
+                .invalid-feedback El nombre es requerido
+          .row
+            .col-12.col-md-6: .form-group
+              label.form-label(for='entry.626378666') Correo electrónico*
+              input.form-control(
+                name='entry.626378666',
+                id='entry.626378666'
+                type='email', 
+                aria-describedby='emailHelp',
+                data-to-check='email')
+              .invalid-feedback El email es requerido
+            .col-12.col-md-6: .form-group
+              label.form-label(for='entry.781355321') Teléfono
+              input.form-control(
+                name='entry.781355321',
+                id='entry.781355321'
+                type='text', 
+                aria-describedby='phoneHelp',
+                data-to-check='phone')
+              .invalid-feedback Asegurate de introducir un número correcto
+          .row: .col: .form-group
+            label.form-label(for='entry.431973573') Mensaje*
+            textarea.form-control(
+              name='entry.431973573',
+              id='entry.431973573'
+              rows='4', cols='50', 
+              aria-describedby='messageHelp',
+              data-to-check='message')
+            .invalid-feedback El mensaje es requerido
+          .row: .col: .form-group
+            small#emailHelp.form-text.text-muted No compartimos tus datos con terceros
+          button.btn.btn-outline-primary.btn-block(type='submit') Enviar
+        
+        iframe#hidden_iframe(
+          name='hidden_iframe', 
+          style='display:none;', 
+          onload='if(submitted) {}')
+
+block append scriptContent
+  +cdn('validator')
+  script(src="/assets/scripts/services/form_validation.js")
+  script(src="/assets/scripts/pages/contact.js")
+
+    
+

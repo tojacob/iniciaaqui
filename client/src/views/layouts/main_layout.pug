@@ -17,11 +17,10 @@ html(lang="es")
 
     block paginationContent
 
-    
-    block footerContent
-      include ../components/footer_component.pug
-
     block scriptContent
       +cdn('jquery')
       +cdn('popper')
       +cdn('bootstrap')
+    
+    block footerContent
+      include ../components/footer_component.pug
