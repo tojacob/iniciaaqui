@@ -1,5 +1,6 @@
 extends ../layouts/main_layout
 include ../mixins/cdn_mixin
+include ../mixins/recaptcha_mixin
 
 block bodyContent
   section.container
@@ -16,7 +17,10 @@ block bodyContent
           enctype='text/plain', 
           action='https://docs.google.com/forms/d/e/1FAIpQLScCT__nyGiBUIckm_xBjtYUKNPAg3PgNa0FLNsBbXlSR6KlsQ/formResponse?', 
           target='hidden_iframe', 
-          data-to-validate='true',
+          data-validate='true',
+          data-recaptcha-sitekey='6LeVWXwUAAAAAOwYe0q5Db9XCzN7M-FIH8fKaxvn',
+          data-recaptcha-callback='recaptchaTest'
+          data-handler='contactFormDone',
           novalidate)
           .row: .col: .form-group
                 label.form-label(for='entry.285683292') Nombre*
@@ -25,7 +29,7 @@ block bodyContent
                   id='entry.285683292'
                   type='text', 
                   aria-describedby='nameHelp',
-                  data-to-check='name')
+                  data-check='name')
                 .invalid-feedback El nombre es requerido
           .row
             .col-12.col-md-6: .form-group
@@ -35,7 +39,7 @@ block bodyContent
                 id='entry.626378666'
                 type='email', 
                 aria-describedby='emailHelp',
-                data-to-check='email')
+                data-check='email')
               .invalid-feedback El email es requerido
             .col-12.col-md-6: .form-group
               label.form-label(for='entry.781355321') Teléfono
@@ -44,7 +48,7 @@ block bodyContent
                 id='entry.781355321'
                 type='text', 
                 aria-describedby='phoneHelp',
-                data-to-check='phone')
+                data-check='phone')
               .invalid-feedback Asegurate de introducir un número correcto
           .row: .col: .form-group
             label.form-label(for='entry.431973573') Mensaje*
@@ -53,7 +57,7 @@ block bodyContent
               id='entry.431973573'
               rows='4', cols='50', 
               aria-describedby='messageHelp',
-              data-to-check='message')
+              data-check='message')
             .invalid-feedback El mensaje es requerido
           .row: .col: .form-group
             small#emailHelp.form-text.text-muted No compartimos tus datos con terceros
@@ -64,10 +68,11 @@ block bodyContent
           style='display:none;', 
           onload='if(submitted) {}')
 
-block append scriptContent
+block append bodyScriptContent
   +cdn('validator')
-  script(src="/assets/scripts/services/form_validation.js")
   script(src="/assets/scripts/pages/contact.js")
+  script(src="/assets/scripts/services/form_validation.js")
+  +recaptcha()
 
     
 

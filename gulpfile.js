@@ -9,6 +9,8 @@ const { src, dest, parallel, series, watch } = require('gulp'),
   cssnano = require('cssnano'),
   autoprefixer = require('autoprefixer'),
   babel = require('gulp-babel'),
+  babelPolyfill = './node_modules/@babel/polyfill/dist/polyfill.min.js',
+  babelConfig = require('./babel.config'),
   uglifyjs = require('uglify-js'),
   composer = require('gulp-uglify/composer'),
   pump = require('pump'),
@@ -19,11 +21,11 @@ const { src, dest, parallel, series, watch } = require('gulp'),
 // --------------------
 const files = {
   dist: {
-    folder: './docs',
-    images: './docs/assets/images',
-    scripts: './docs/assets/scripts',
-    views: './docs/',
-    styles: './docs/assets/styles'
+    folder: './dist',
+    images: './dist/assets/images',
+    scripts: './dist/assets/scripts',
+    views: './dist/',
+    styles: './dist/assets/styles'
   },
   src: {
     folder: './client/src',
@@ -130,9 +132,7 @@ function prodCompileScripts(cb) {
   pump(
     [
       src(files.src.scripts),
-      babel({
-        presets: ['@babel/env']
-      }),
+      babel(babelConfig),
       minify(options),
       dest(files.dist.scripts)
     ],

@@ -2,20 +2,32 @@
 
 $(formValidation);
 
+//🡓 Controla el estado del boton para el formulario
 function buttonState(button, state) {
   'use strict';
   state ? $(button).removeAttr('disabled') : $(button).attr('disabled', true);
 }
 
+//🡓 Maneja el evento submit
+function submit(state, form, formData, formHandler) {
+  buttonState($(form).find('[type="submit"]'), false);
+
+  const handler = window[formHandler];
+
+  handler && typeof handler === 'function'
+    ? handler(state, form, formData)
+    : form.submit();
+}
+
 function formValidation() {
   'use strict';
 
-  const forms = $('form[data-to-validate]');
+  const forms = $('form[data-validate]');
 
   const schemaRules = {
-    name: ['required', 'min:3', 'max:50', "regex:/^[A-ZÁÉÍÑÓÚÜ ',.-]+$/i"],
+    name: ['required', 'min:3', 'max:50', "regex:/^[a-záéíóúñü ',.-]+$/i"],
     email: ['required', 'email', 'max:100'],
-    phone: ['numeric', 'min:7', 'max:10'],
+    phone: ['min:7', 'max:10', 'regex:/^(\\d)+$/i'],
     message: ['required', 'min:0', 'max:600']
   };
 
@@ -23,7 +35,7 @@ function formValidation() {
   //🡓 {field1: rules, field2: rules, ...}
   function fieldsWithRules(fields, temp = {}) {
     fields.each((i, field) => {
-      temp[$(field).attr('name')] = schemaRules[$(field).attr('data-to-check')];
+      temp[$(field).attr('name')] = schemaRules[$(field).attr('data-check')];
     });
 
     return temp;
@@ -39,25 +51,14 @@ function formValidation() {
     return temp;
   }
 
-  //🡓 Maneja el evento submit
-  function submit(form, formData, formHandler) {
-    buttonState($(form).find('[type="submit"]'), false);
-
-    const handler = window[formHandler];
-
-    handler && typeof handler === 'function'
-      ? handler(form, formData)
-      : form.submit();
-  }
-
   //🡓 Comienza la validacion
   forms.each((i, element) => {
     const form = $(element),
-      formFields = form.find('[data-to-check]'),
+      formFields = form.find('[data-check]'),
       formRules = fieldsWithRules(formFields),
-      formRecaptcha = $(form.find('.is-recaptcha')),
+      formRecaptchaSiteKey = form.attr('data-recaptcha-sitekey'),
       formSubmit = $(form.find('[type="submit"]')),
-      formHandler = form.attr('data-to-handle');
+      formHandler = form.attr('data-handler');
 
     //🡓 Interceptamos el submit
     formSubmit.click(event => {
@@ -77,24 +78,18 @@ function formValidation() {
             .addClass('is-invalid')
             .keypress(() => $(`[name='${field}']`).removeClass('is-invalid'));
         });
-      } else if (formRecaptcha.length) {
-        const recaptchaId = formRecaptcha.attr('id'),
-          widgetId = formRecaptcha.attr('data-widget-id'),
-          execute = () => grecaptcha.execute(widgetId);
+      } else if (formRecaptchaSiteKey) {
+        const recaptchaCallbackName = form.attr('data-recaptcha-callback'),
+          recaptchaCallback = window[recaptchaCallbackName];
 
-        //🡓 Crea el callback para la captcha
-        window[recaptchaId] = response => {
-          if (!response) {
-            return execute();
-          } else {
-            formData['g-recaptcha-response'] = response;
-            submit(form, formData, formHandler);
-          }
-        };
-
-        execute();
+        //🡓 Llama al callback
+        recaptchaCallback && typeof recaptchaCallback === 'function'
+          ? recaptchaCallback(formRecaptchaSiteKey, state => {
+              return submit(state, form, formData, formHandler);
+            })
+          : console.error('Missing the captcha callback to continue');
       } else {
-        submit(form, formData, formHandler);
+        submit(state, form, formData, formHandler);
       }
     });
   });
