@@ -20,7 +20,21 @@ $container-max-widths: (
   md: 15px + 15px + 1024px
 );
 
-// Color
+// Colors
+
+$theme-colors: (
+  "primary": #2196F3,
+  "success": #009688,
+  "danger": #FF9800);
+
+$theme-colors: map-remove($theme-colors, 
+  "secondary",
+  "info",
+  "warning",
+  "light",
+  "dark"
+);
+
 $body-bg: $gray-200;
 
 // Typo
@@ -44,5 +58,7 @@ $h6-font-size:                $font-size-base;
 @import '../../../node_modules/bootstrap/scss/dropdown';
 @import '../../../node_modules/bootstrap/scss/forms';
 @import '../../../node_modules/bootstrap/scss/alert';
+@import '../../../node_modules/bootstrap/scss/tooltip';
+@import '../../../node_modules/bootstrap/scss/popover';
 
 // @import '../../../node_modules/bootstrap/scss/bootstrap'

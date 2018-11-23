@@ -8,7 +8,7 @@ block bodyContent
       .col-12.box.shadow-sm: .contact-form
 
         h2.mb-4 Contacto
-        p Hola, si deseas aprender más o tienes preguntas, puedes llenar el siguiente formulario.
+        p Si deseas aprender más o tienes preguntas, puedes llenar el siguiente formulario.
 
         hr
 
@@ -18,8 +18,6 @@ block bodyContent
           action='https://docs.google.com/forms/d/e/1FAIpQLScCT__nyGiBUIckm_xBjtYUKNPAg3PgNa0FLNsBbXlSR6KlsQ/formResponse?', 
           target='hidden_iframe', 
           data-validate='true',
-          data-recaptcha-sitekey='6LeVWXwUAAAAAOwYe0q5Db9XCzN7M-FIH8fKaxvn',
-          data-recaptcha-callback='recaptchaTest'
           data-handler='contactFormDone',
           novalidate)
           .row: .col: .form-group
@@ -72,7 +70,6 @@ block append bodyScriptContent
   +cdn('validator')
   script(src="/assets/scripts/pages/contact.js")
   script(src="/assets/scripts/services/form_validation.js")
-  +recaptcha()
 
     
 

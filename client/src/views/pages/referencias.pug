@@ -2,7 +2,45 @@ extends ../layouts/main_layout
 include ../mixins/pagination_mixin
 
 block bodyContent
+
+  -
+    const AllReferences = [
+      {
+        title: 'Capítulo 1',
+        content: [
+          {
+            teme: 'Conciencia',
+            quote: 'Romanos 2:14-16',
+            text: 'Porque cuando los gentiles que no tienen ley, hacen por naturaleza lo que es de la ley, éstos, aunque no tengan ley, son ley para sí mismos, mostrando la obra de la ley escrita en sus corazones, dando testimonio su conciencia, y acusándoles o defendiéndoles sus razonamientos, en el día en que Dios juzgará por Jesucristo los secretos de los hombres, conforme a mi evangelio.',
+            position: 'bottom'
+          }
+        ]
+      }
+    ];
+
   section.container
     .row
       .col-12.box.shadow-sm
-        h1 hello world!
+        h2.mb-4 Referencias
+        p.
+          Puedes hacer click en cada versiculo para abrir y cerrar su respectiva cita.
+          Todas las citas fueron tomadas de la Biblia Reina Valera 1996.
+        hr
+
+        .row
+          each chapter in AllReferences
+            .col-12.col-md-6  
+              h3.mb-4=chapter.title
+              each reference in chapter.content
+                p #{reference.teme}: 
+                  button.btn.btn-link.btn-reference(
+                    type='button', 
+                    data-toggle='popover', 
+                    data-placement=reference.position,
+                    title=reference.quote, 
+                    data-content=reference.text)=reference.quote
+                hr
+
+block append bodyScriptContent
+  script(src="/assets/scripts/pages/references.js")
+        

@@ -1,6 +1,6 @@
 var submitted = false; // Global var
 
-function contactFormDone(error, form, formData) {
+function contactFormDone(state, form, formData) {
   'use strict';
 
   const isSuccess = `<div class="alert alert-success" role="alert">
@@ -11,7 +11,7 @@ function contactFormDone(error, form, formData) {
     </p>
   </div>`;
 
-  const isError = `<div class="alert alert-warning" role="alert">
+  const isError = `<div class="alert alert-danger" role="alert">
     <h4 class="alert-heading">El mensaje no ha sido enviado</h4>
     <hr>
     <p>
@@ -21,14 +21,16 @@ function contactFormDone(error, form, formData) {
 
   $('#gform *').fadeOut(2000);
 
-  if (error) {
+  if (state.error) {
     $('#gform').prepend(isError);
   } else {
+    $(form).submit();
     submitted = true;
     $('#gform').prepend(isSuccess);
   }
 }
 
+/*
 function recaptchaTest(siteKey, formHandlerCallback) {
   grecaptcha.ready(function() {
     grecaptcha
@@ -52,3 +54,4 @@ function recaptchaTest(siteKey, formHandlerCallback) {
       });
   });
 }
+*/

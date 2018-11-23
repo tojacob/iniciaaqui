@@ -87,9 +87,9 @@ function formValidation() {
           ? recaptchaCallback(formRecaptchaSiteKey, state => {
               return submit(state, form, formData, formHandler);
             })
-          : console.error('Missing the captcha callback to continue');
+          : console.error('Define the captcha callback to continue');
       } else {
-        submit(state, form, formData, formHandler);
+        submit({}, form, formData, formHandler);
       }
     });
   });
