@@ -37,6 +37,9 @@ const files = {
   main: {
     views: './client/src/views/pages/**/*.pug',
     styles: './client/src/styles/main.scss'
+  },
+  data: {
+    references: require('./client/src/data/references')
   }
 };
 
@@ -61,7 +64,7 @@ function scriptsToDist() {
 // Compile pug pages
 function compileViews() {
   return src(files.main.views)
-    .pipe(pug())
+    .pipe(pug({ locals: { allReferences: files.data.references } }))
     .pipe(dest(files.dist.views));
 }
 
