@@ -1,0 +1,12 @@
+extends ../layouts/main_layout
+include ../mixins/pagination_mixin
+
+block bodyContent
+  section.container
+    .row
+      article.col-12.box.shadow-sm
+        .alert.alert-primary(role='alert')
+          h4.alert-heading Oops!
+          hr
+          p La página que buscas no existe.
+          a.btn.btn-outline-primary(href="/" role="button") Volver al inicio
