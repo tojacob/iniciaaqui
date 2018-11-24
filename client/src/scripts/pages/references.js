@@ -8,18 +8,27 @@ $(function() {
       refTitle = event.target.dataset.title,
       refBody = event.target.dataset.content;
 
-    function convertText(text) {
+    function convertText(text, callback) {
       text = text.replace(/\r\n?|\n/g, '<br>');
       text = text.replace(/<br>\s*<br>/g, '</p><p>');
       text = '<p>' + text + '</p>';
       return text;
     }
 
-    modalTitle.text(refTitle);
-    modalBody.html(convertText(refBody));
+    function openModal() {
+      const preload =
+        '<div class="w-100 d-flex justify-content-center"><img src="/assets/images/big-preload.gif"></img></div>';
 
-    setTimeout(function() {
+      modalTitle.text(refTitle);
+      modalBody.html(preload);
       refModal.modal();
-    }, 500);
+
+      setTimeout(() => {
+        const mBody = convertText(refBody);
+        modalBody.html(mBody);
+      }, 600);
+    }
+
+    openModal();
   });
 });
