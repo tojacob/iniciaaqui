@@ -4,3 +4,8 @@
 @import './pages/contact.scss';
 @import './pages/references.scss';
 @import './atomics.scss';
+
+// Overwrite Styles
+h2{
+  margin-bottom: 24px;
+}

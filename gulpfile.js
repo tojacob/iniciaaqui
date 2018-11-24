@@ -14,7 +14,9 @@ const { src, dest, parallel, series, watch } = require('gulp'),
   uglifyjs = require('uglify-js'),
   composer = require('gulp-uglify/composer'),
   pump = require('pump'),
-  minify = composer(uglifyjs, console);
+  minify = composer(uglifyjs, console),
+  breakFile = require('./scripts/breakFile'),
+  formatFile = require('./scripts/formatFile');
 
 // --------------------
 // FILES AND FOLDERS TO WORK
@@ -39,7 +41,12 @@ const files = {
     styles: './client/src/styles/main.scss'
   },
   data: {
-    references: require('./client/src/data/references')
+    references: require('./client/src/data/references'),
+    chapters: {
+      main: './client/src/data/book.txt',
+      dist: './client/src/data/chapters',
+      src: './client/src/data/chapters/*.html'
+    }
   }
 };
 
@@ -66,6 +73,45 @@ function compileViews() {
   return src(files.main.views)
     .pipe(pug({ locals: { allReferences: files.data.references } }))
     .pipe(dest(files.dist.views));
+}
+
+// --------------------
+// PRE COMPILE
+// --------------------
+
+// Clean chapters
+function cleanChapters() {
+  return del(files.data.chapters.dist);
+}
+
+// Create chapters
+function createChapters(cb) {
+  return src(files.data.chapters.main)
+    .pipe(
+      breakFile({
+        splitAttribute: {
+          exp: '\\r\\n\\r\\n\\r\\n',
+          flags: 'gi'
+        },
+        file: {
+          name: 'chapter',
+          separator: '_',
+          type: 'html'
+        },
+        showParts: false
+      })
+    )
+    .pipe(dest(files.data.chapters.dist));
+}
+
+function formatChapters() {
+  return src(files.data.chapters.src)
+    .pipe(formatFile())
+    .pipe(dest(files.data.chapters.dist));
+}
+
+function preCompile() {
+  return series(cleanChapters, createChapters, formatChapters);
 }
 
 // --------------------
@@ -149,6 +195,7 @@ function prod() {
     cleanDist,
     imagesToDist,
     scriptsToDist,
+    preCompile(),
     compileViews,
     prodCompileStyles,
     prodCompileScripts
@@ -158,6 +205,7 @@ function prod() {
 // --------------------
 // Export tasks
 // --------------------
+exports.pre = preCompile();
 exports.dev = dev();
 exports.prod = prod();
 exports.default = dev();
