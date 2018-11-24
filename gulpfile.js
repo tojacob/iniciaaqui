@@ -26,7 +26,7 @@ const files = {
     folder: './dist',
     images: './dist/assets/images',
     scripts: './dist/assets/scripts',
-    views: './dist/',
+    views: './dist',
     styles: './dist/assets/styles'
   },
   src: {
@@ -34,7 +34,8 @@ const files = {
     images: './client/src/images/**/*.*',
     scripts: './client/src/scripts/**/*.js',
     views: './client/src/views/**/*.pug',
-    styles: './client/src/styles/**/*.scss'
+    styles: './client/src/styles/**/*.scss',
+    favicon: './client/src/favicon/*.*'
   },
   main: {
     views: './client/src/views/pages/**/*.pug',
@@ -68,11 +69,26 @@ function scriptsToDist() {
   return src(files.src.scripts).pipe(dest(files.dist.scripts));
 }
 
+function faviconToDist() {
+  return src(files.src.favicon).pipe(dest(files.dist.views));
+}
+
 // Compile pug pages
 function compileViews() {
   return src(files.main.views)
     .pipe(pug({ locals: { allReferences: files.data.references } }))
     .pipe(dest(files.dist.views));
+}
+
+// Common task
+function commonTasks() {
+  return series(
+    cleanDist,
+    imagesToDist,
+    scriptsToDist,
+    faviconToDist,
+    compileViews
+  );
 }
 
 // --------------------
@@ -152,14 +168,7 @@ function devServer(cb) {
 
 // Star development tast
 function dev() {
-  return series(
-    cleanDist,
-    imagesToDist,
-    scriptsToDist,
-    compileViews,
-    devCompileStyles,
-    devServer
-  );
+  return series(commonTasks(), devCompileStyles, devServer);
 }
 
 // --------------------
@@ -192,11 +201,8 @@ function prodCompileScripts(cb) {
 // Start production tasks
 function prod() {
   return series(
-    cleanDist,
-    imagesToDist,
-    scriptsToDist,
     preCompile(),
-    compileViews,
+    commonTasks(),
     prodCompileStyles,
     prodCompileScripts
   );
