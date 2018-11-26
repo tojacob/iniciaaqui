@@ -36,7 +36,7 @@ const allReferences = [
         ]
       },
       {
-        teme: 'La ley de juicio',
+        teme: 'La ley del juicio',
         quotes: [
           {
             quote: 'Romanos 2:12',
@@ -84,13 +84,13 @@ const allReferences = [
               
               7 No tomarás el nombre de Jehová tu Dios en vano; porque no dará por inocente Jehová al que tomare su nombre en vano.
               
-              8 Acuérdate del día de reposo[a] para santificarlo.
+              8 Acuérdate del día de reposo para santificarlo.
               
               9 Seis días trabajarás, y harás toda tu obra;
               
-              10 mas el séptimo día es reposo[b] para Jehová tu Dios; no hagas en él obra alguna, tú, ni tu hijo, ni tu hija, ni tu siervo, ni tu criada, ni tu bestia, ni tu extranjero que está dentro de tus puertas.
+              10 mas el séptimo día es reposo para Jehová tu Dios; no hagas en él obra alguna, tú, ni tu hijo, ni tu hija, ni tu siervo, ni tu criada, ni tu bestia, ni tu extranjero que está dentro de tus puertas.
               
-              11 Porque en seis días hizo Jehová los cielos y la tierra, el mar, y todas las cosas que en ellos hay, y reposó en el séptimo día; por tanto, Jehová bendijo el día de reposo[c] y lo santificó.
+              11 Porque en seis días hizo Jehová los cielos y la tierra, el mar, y todas las cosas que en ellos hay, y reposó en el séptimo día; por tanto, Jehová bendijo el día de reposo y lo santificó.
               
               12 Honra a tu padre y a tu madre, para que tus días se alarguen en la tierra que Jehová tu Dios te da.
               
