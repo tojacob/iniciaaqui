@@ -1,14 +1,13 @@
 // ===============
-// Required
+// Pre config
 // ===============
 
-@import '../../../node_modules/bootstrap/scss/functions';
-@import '../../../node_modules/bootstrap/scss/variables';
-@import '../../../node_modules/bootstrap/scss/mixins';
-
-// ===============
-// Config
-// ===============
+$theme-colors: (
+  "primary": #F44336,
+  "secondary": #B71C1C,
+  "success": #009688,
+  "danger": #FF9800
+);
 
 // Layout
 $grid-gutter-width: 32px;
@@ -20,14 +19,19 @@ $container-max-widths: (
   md: 15px + 15px + 1024px
 );
 
-// Colors
+// ===============
+// Required modules
+// ===============
 
-$theme-colors: (
-  "primary": #F44336,
-  "secondary": #B71C1C,
-  "success": #009688,
-  "danger": #FF9800
-);
+@import '../../../node_modules/bootstrap/scss/functions';
+@import '../../../node_modules/bootstrap/scss/variables';
+@import '../../../node_modules/bootstrap/scss/mixins';
+
+// ===============
+// Config
+// ===============
+
+// Colors
 
 $theme-colors: map-remove($theme-colors,
   "info",
@@ -37,8 +41,6 @@ $theme-colors: map-remove($theme-colors,
 );
 
 $body-bg: $gray-200;
-$link-color: theme-color("primary");
-$link-hover-color: darken($link-color, 15%);
 
 // Typo
 $h1-font-size:                $font-size-base * 1.75;
@@ -49,7 +51,7 @@ $h5-font-size:                $font-size-base;
 $h6-font-size:                $font-size-base;
 
 // ===============
-// Optional
+// Optional modules
 // ===============
 
 @import '../../../node_modules//bootstrap/scss/reboot';
