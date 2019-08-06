@@ -26,8 +26,11 @@ function formValidation() {
 
   const schemaRules = {
     name: ['required', 'min:3', 'max:50', "regex:/^[a-záéíóúñü ',.-]+$/i"],
-    email: ['required', 'email', 'max:100'],
-    phone: ['min:7', 'max:10', 'regex:/^(\\d)+$/i'],
+    userContact: [
+      'required', 
+      "regex:/^[a-zA-Z0-9._~\\-+]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$|^\\+?[0-9 ]{3}-?[0-9 ]{6,12}$/i"
+    ],
+    // phone: ['min:7', 'max:10', 'regex:/^(\\d)+$/i'],
     message: ['required', 'min:0', 'max:600']
   };
 

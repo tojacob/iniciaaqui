@@ -31,23 +31,14 @@ block bodyContent
                 .invalid-feedback El nombre es requerido
           .row
             .col-12.col-md-6: .form-group
-              label.form-label(for='entry.626378666') Correo electrónico*
+              label.form-label(for='entry.626378666') Email o teléfono*
               input.form-control(
                 name='entry.626378666',
                 id='entry.626378666'
-                type='email', 
-                aria-describedby='emailHelp',
-                data-check='email')
-              .invalid-feedback El email es requerido
-            .col-12.col-md-6: .form-group
-              label.form-label(for='entry.781355321') Teléfono
-              input.form-control(
-                name='entry.781355321',
-                id='entry.781355321'
-                type='text', 
-                aria-describedby='phoneHelp',
-                data-check='phone')
-              .invalid-feedback Asegurate de introducir un número correcto
+                type='userContact', 
+                aria-describedby='userContactHelp',
+                data-check='userContact')
+              .invalid-feedback El email o  teléfono es requerido
           .row: .col: .form-group
             label.form-label(for='entry.431973573') Mensaje*
             textarea.form-control(
