@@ -7,7 +7,7 @@ function contactFormDone(state, form, formData) {
     <h4 class="alert-heading">Su mensaje ha sido enviado</h4>
     <hr>
     <p>
-      Recibirá una respuesta lo antes posible.
+      Pronto recibirá una respuesta.
     </p>
   </div>`;
 
