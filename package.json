@@ -6,25 +6,30 @@
   "author": "jacob.83@hotmail.com",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "pre": "npx gulp pre",
+    "dev": "npx gulp dev",
+    "prod": "npx gulp prod"
+  },
   "devDependencies": {
-    "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6",
-    "autoprefixer": "^9.3.1",
-    "browser-sync": "^2.26.3",
-    "cssnano": "^4.1.7",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "autoprefixer": "^9.6.1",
+    "browser-sync": "^2.26.7",
+    "cssnano": "^4.1.10",
     "del": "^3.0.0",
     "gulp": "4.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-postcss": "^8.0.0",
     "gulp-pug": "^4.0.1",
     "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.1",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
     "pump": "^3.0.0",
-    "uglify-js": "^3.4.9"
+    "uglify-js": "^3.6.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0",
-    "bootstrap": "^4.1.3"
+    "@babel/polyfill": "^7.4.4",
+    "bootstrap": "^4.3.1"
   }
 }

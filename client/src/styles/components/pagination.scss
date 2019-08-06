@@ -1,0 +1,13 @@
+.page-item.active .page-link{
+  color: #fff;
+  background-color: theme-color("secondary");
+  border-color: theme-color("secondary");
+}
+
+.page-link{
+  color: theme-color('primary');
+
+  &:focus, &:hover {
+    color: theme-color('primary');
+  }
+}

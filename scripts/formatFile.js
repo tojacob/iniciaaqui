@@ -1,6 +1,5 @@
 'use strict';
-const t2 = require('through2'),
-  Vi = require('vinyl');
+const t2 = require('through2');
 
 class FormatFile {
   // Hooks
@@ -19,7 +18,7 @@ class FormatFile {
   applyFormat(content) {
     // Titles
     content = content.replace(/capítulo\s\d/gi, str => {
-      return '<h2>' + str + '</h2>';
+      return '<h2>' + str + '</h2> + <hr/>';
     });
 
     // Subtitles
@@ -67,7 +66,7 @@ class FormatFile {
 }
 
 module.exports = options => {
-  return t2.obj(function(chunk, encoding, callback) {
+  return t2.obj(function (chunk, encoding, callback) {
     const formatFile = new FormatFile(options, chunk, encoding);
 
     formatFile.formatting(this, callback);

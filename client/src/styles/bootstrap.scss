@@ -23,12 +23,13 @@ $container-max-widths: (
 // Colors
 
 $theme-colors: (
-  "primary": #2196F3,
+  "primary": #F44336,
+  "secondary": #B71C1C,
   "success": #009688,
-  "danger": #FF9800);
+  "danger": #FF9800
+);
 
-$theme-colors: map-remove($theme-colors, 
-  "secondary",
+$theme-colors: map-remove($theme-colors,
   "info",
   "warning",
   "light",
@@ -36,6 +37,8 @@ $theme-colors: map-remove($theme-colors,
 );
 
 $body-bg: $gray-200;
+$link-color: theme-color("primary");
+$link-hover-color: darken($link-color, 15%);
 
 // Typo
 $h1-font-size:                $font-size-base * 1.75;

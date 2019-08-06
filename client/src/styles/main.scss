@@ -1,11 +1,30 @@
 @import './bootstrap.scss';
 @import './components/navbar.scss';
 @import './components/box.scss';
+@import './components/footer.scss';
+@import './components/pagination.scss';
 @import './pages/contact.scss';
 @import './pages/references.scss';
 @import './atomics.scss';
 
 // Overwrite Styles
+
+*{
+  font-family: 'Montserrat', sans-serif;
+}
+
 h2{
+  font-weight: 700;
   margin-bottom: 24px;
+}
+
+h3{
+  font-weight: 500;
+  margin-top: 24px;
+  margin-bottom: 14px;
+}
+
+p{
+  font-weight: 400;
+  font-size: 16px;
 }
