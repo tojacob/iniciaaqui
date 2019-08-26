@@ -4,25 +4,25 @@ const functions = require('firebase-functions'),
   apikeys = require('./config/apikeys');
 
 exports.validateRecaptcha = functions
-  .runWith({
-    timeoutSeconds: 300,
-    memory: '256MB'
-  })
   .region('us-east1')
+  .runWith({
+    timeoutSeconds: 120,
+    memory: '128MB'
+  })
   .https.onRequest((req, res) =>
-    cors(req, res, () => {
+    cors(req, res, () =>
       requestModule(
         {
-          url: 'https://www.google.com/recaptcha/api/siteverify',
+          url:
+            'https://www.google.com/recaptcha/api/siteverify' +
+            '?secret=' + apikeys.recaptchaSecretKey +
+            '&response=' + req.query.token,
           method: 'POST',
-          body: {
-            secret: apikeys.recaptchaSecretKey,
-            response: req.query.token
-          }
+          json: true
         },
         (error, response, body) => {
-          res.json({ error, response, body });
+          res.json(body);
         }
-      );
-    })
+      )
+    )
   );

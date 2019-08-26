@@ -8,17 +8,6 @@ function buttonState(button, state) {
   state ? $(button).removeAttr('disabled') : $(button).attr('disabled', true);
 }
 
-//🡓 Maneja el evento submit
-function submit(state, form, formData, formHandler) {
-  buttonState($(form).find('[type="submit"]'), false);
-
-  const handler = window[formHandler];
-
-  handler && typeof handler === 'function'
-    ? handler(state, form, formData)
-    : form.submit();
-}
-
 function formValidation() {
   'use strict';
 
@@ -27,7 +16,7 @@ function formValidation() {
   const schemaRules = {
     name: ['required', 'min:3', 'max:50', "regex:/^[a-záéíóúñü ',.-]+$/i"],
     userContact: [
-      'required', 
+      'required',
       "regex:/^[a-zA-Z0-9._~\\-+]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$|^\\+?[0-9 ]{3}-?[0-9 ]{6,12}$/i"
     ],
     message: ['required', 'min:0', 'max:600']
@@ -58,14 +47,15 @@ function formValidation() {
     const form = $(element),
       formFields = form.find('[data-check]'),
       formRules = fieldsWithRules(formFields),
-      formRecaptchaSiteKey = form.attr('data-recaptcha-sitekey'),
-      formSubmit = $(form.find('[type="submit"]')),
-      formHandler = form.attr('data-handler');
+      formSubmit = $(form.find('[type="submit"]'));
 
     //🡓 Interceptamos el submit
     formSubmit.click(event => {
       event.preventDefault();
       event.stopPropagation();
+
+      //🡓 Desactivamos el boton
+      buttonState(formSubmit, false);
 
       let formData = fieldsWithValues(formFields);
       const formValidation = new Validator(formData, formRules);
@@ -80,18 +70,11 @@ function formValidation() {
             .addClass('is-invalid')
             .keypress(() => $(`[name='${field}']`).removeClass('is-invalid'));
         });
-      } else if (formRecaptchaSiteKey) {
-        const recaptchaCallbackName = form.attr('data-recaptcha-callback'),
-          recaptchaCallback = window[recaptchaCallbackName];
 
-        //🡓 Llama al callback
-        recaptchaCallback && typeof recaptchaCallback === 'function'
-          ? recaptchaCallback(formRecaptchaSiteKey, state => {
-              return submit(state, form, formData, formHandler);
-            })
-          : console.error('Define the captcha callback to continue');
+        //🡓 Reactivamos en boton
+        buttonState(formSubmit, true);
       } else {
-        submit({}, form, formData, formHandler);
+        grecaptcha.execute();
       }
     });
   });

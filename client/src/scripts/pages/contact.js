@@ -1,57 +1,71 @@
-var submitted = false; // Global var
+// TODO: crear cloud function para validar captcha
+// TODO: crear cloud function para enviar mensaje
 
-function contactFormDone(state, form, formData) {
-  'use strict';
+function onLoadRecaptcha(recaptchaResponse) {
+  console.log('token', recaptchaResponse);
+  const valitateRecaptchaUrl =
+    'https://us-east1-iniciaaqui-68a79.cloudfunctions.net/validateRecaptcha';
 
-  const isSuccess = `<div class="alert alert-success" role="alert">
-    <h4 class="alert-heading">Su mensaje ha sido enviado</h4>
-    <hr>
-    <p>
-      Pronto recibirá una respuesta.
-    </p>
-  </div>`;
+  // Util. Modifica la vista según el resultado de la operación
+  function formDone(state) {
+    'use strict';
 
-  const isError = `<div class="alert alert-danger" role="alert">
-    <h4 class="alert-heading">El mensaje no ha sido enviado</h4>
-    <hr>
-    <p>
-      Ha ocurrido un error al enviar el formulario. Por favor, intentelo más tarde.
-    </p>
-  </div>`;
+    const isSuccess =
+      `<div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Su mensaje ha sido enviado</h4>
+        <hr>
+        <p>
+          Pronto recibirá una respuesta.
+        </p>
+      </div>`;
 
-  $('#gform *').fadeOut(2000);
+    const isError =
+      `<div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">El mensaje no ha sido enviado</h4>
+        <hr>
+        <p>
+          Ha ocurrido un error al enviar el formulario. Por favor, intentelo más tarde.
+        </p>
+      </div>`;
 
-  if (state.error) {
-    $('#gform').prepend(isError);
-  } else {
-    $(form).submit();
-    submitted = true;
-    $('#gform').prepend(isSuccess);
+    $('#contactForm *').fadeOut(2000);
+
+    if (!state) $('#contactForm').prepend(isError);
+    else $('#contactForm').prepend(isSuccess);
   }
-}
 
-/*
-function recaptchaTest(siteKey, formHandlerCallback) {
-  grecaptcha.ready(function() {
-    grecaptcha
-      .execute(siteKey, {
-        action: 'contactPage'
-      })
-      .then(function(token) {
-        $.ajax(
-          `https://us-east1-iniciaaqui-68a79.cloudfunctions.net/validateRecaptcha?token=${token}`,
-          {
-            method: 'POST',
-            crossDomain: true,
-            success: function(data, textStatus, jqXHR) {
-              formHandlerCallback(false);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-              formHandlerCallback(true);
-            }
-          }
-        );
-      });
-  });
+  // Util. Envia una solicitud al servidor y ejecuta un callback
+  function sendWithAjax(path, handler) {
+    $.ajax(
+      path,
+      {
+        method: 'POST',
+        crossDomain: true,
+        success: function (data, textStatus, jqXHR) {
+          if (!data.success) handler(false);
+          else handler(true);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          handler(false);
+        }
+      }
+    );
+  }
+
+  // Util. Maneja el estado del formulario
+  function formHandler(status) {
+    if (!status) return formDone(status);
+
+    // Enviamos el mensaje a nuestro correo
+    // sendWithAjax('#', formDone);
+
+    // Finalizamos
+    return formDone(status);
+  }
+
+  // Main. Validamos el captcha y procedemos
+  sendWithAjax(
+    `${valitateRecaptchaUrl}?token=${recaptchaResponse}`,
+    formHandler
+  );
 }
-*/

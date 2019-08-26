@@ -17,6 +17,11 @@ mixin cdn(name)
         src='https://cdn.jsdelivr.net/npm/validatorjs@3.15.1/dist/lang/es.min.js')
       script(
         src='https://cdn.jsdelivr.net/npm/validatorjs@3.15.1/dist/validator.min.js')
+    when 'grecaptcha'
+      script(
+        src="https://www.google.com/recaptcha/api.js?hl='es-419'", 
+        async, defer
+      )
     default
       span(style="background-color: black; color: white;").
         > [CDN] '#{name}' no esta definido

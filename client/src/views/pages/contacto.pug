@@ -1,6 +1,5 @@
 extends ../layouts/main_layout
 include ../mixins/cdn_mixin
-include ../mixins/recaptcha_mixin
 
 block bodyContent
   section.container
@@ -12,56 +11,55 @@ block bodyContent
 
         hr
 
-        form#gform(
-          name='gform', 
-          enctype='text/plain', 
-          action='https://docs.google.com/forms/d/e/1FAIpQLScCT__nyGiBUIckm_xBjtYUKNPAg3PgNa0FLNsBbXlSR6KlsQ/formResponse?', 
-          target='hidden_iframe', 
+        form#contactForm(
           data-validate='true',
           data-handler='contactFormDone',
-          novalidate)
+          novalidate
+        )
           .row: .col: .form-group
-                label.form-label(for='entry.285683292') Nombre*
+                label.form-label(for='name') Nombre*
                 input.form-control(
-                  name='entry.285683292',
-                  id='entry.285683292'
+                  name='name',
+                  id='name'
                   type='text', 
                   aria-describedby='nameHelp',
                   data-check='name')
                 .invalid-feedback El nombre es requerido
           .row
             .col-12.col-md-6: .form-group
-              label.form-label(for='entry.626378666') Email o teléfono*
+              label.form-label(for='userContact') Email o teléfono*
               input.form-control(
-                name='entry.626378666',
-                id='entry.626378666'
+                name='userContact',
+                id='userContact'
                 type='userContact', 
                 aria-describedby='userContactHelp',
                 data-check='userContact')
               .invalid-feedback El email o  teléfono es requerido
           .row: .col: .form-group
-            label.form-label(for='entry.431973573') Mensaje*
+            label.form-label(for='message') Mensaje*
             textarea.form-control(
-              name='entry.431973573',
-              id='entry.431973573'
+              name='message',
+              id='message'
               rows='4', cols='50', 
               aria-describedby='messageHelp',
               data-check='message')
             .invalid-feedback El mensaje es requerido
           .row: .col: .form-group
-            small#emailHelp.form-text.text-muted No compartimos tus datos con terceros
+            small#emailHelp.form-text.text-muted No compartimos tus datos con nadie
+          .g-recaptcha(
+            data-sitekey="6LckfrEUAAAAALLjGJKipDpeO7pmLPZSIKF_SWA2",
+            data-callback="onLoadRecaptcha",
+            data-size="invisible"
+          )
           button.btn.btn-outline-primary.btn-block(type='submit') 
             b Enviar
-        
-        iframe#hidden_iframe(
-          name='hidden_iframe', 
-          style='display:none;', 
-          onload='if(submitted) {}')
 
 block append bodyScriptContent
   +cdn('validator')
   script(src="/assets/scripts/pages/contact.js")
   script(src="/assets/scripts/services/form_validation.js")
+  +cdn('grecaptcha')
+
 
     
 
