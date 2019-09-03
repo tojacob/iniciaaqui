@@ -1,10 +1,10 @@
-// TODO: crear cloud function para validar captcha
 // TODO: crear cloud function para enviar mensaje
 
 function onLoadRecaptcha(recaptchaResponse) {
-  console.log('token', recaptchaResponse);
   const valitateRecaptchaUrl =
-    'https://us-east1-iniciaaqui-68a79.cloudfunctions.net/validateRecaptcha';
+    'https://us-central1-iniciaaqui-68a79.cloudfunctions.net/validateRecaptcha';
+  const sendEmailUrl =
+    'https://us-central1-iniciaaqui-68a79.cloudfunctions.net/sendEmail';
 
   // Util. Modifica la vista según el resultado de la operación
   function formDone(state) {
@@ -30,42 +30,46 @@ function onLoadRecaptcha(recaptchaResponse) {
 
     $('#contactForm *').fadeOut(2000);
 
-    if (!state) $('#contactForm').prepend(isError);
+    if (!state) return $('#contactForm').prepend(isError);
     else $('#contactForm').prepend(isSuccess);
   }
 
   // Util. Envia una solicitud al servidor y ejecuta un callback
-  function sendWithAjax(path, handler) {
+  function sendWithAjax(path, body, handler) {
     $.ajax(
       path,
       {
         method: 'POST',
         crossDomain: true,
+        data: body,
         success: function (data, textStatus, jqXHR) {
+          console.log(data);
           if (!data.success) handler(false);
           else handler(true);
         },
         error: function (jqXHR, textStatus, errorThrown) {
+          console.log(error);
           handler(false);
         }
       }
     );
   }
 
-  // Util. Maneja el estado del formulario
-  function formHandler(status) {
-    if (!status) return formDone(status);
-
-    // Enviamos el mensaje a nuestro correo
-    // sendWithAjax('#', formDone);
-
-    // Finalizamos
-    return formDone(status);
-  }
-
   // Main. Validamos el captcha y procedemos
   sendWithAjax(
     `${valitateRecaptchaUrl}?token=${recaptchaResponse}`,
-    formHandler
+    false,
+    function () {
+      // Enviamos el mensaje a nuestro correo
+      sendWithAjax(
+        sendEmailUrl,
+        {
+          name: $('#name').val(),
+          userContact: $('#userContact').val(),
+          message: $('#message').val()
+        },
+        formDone
+      );
+    }
   );
 }

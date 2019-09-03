@@ -31,7 +31,7 @@ block bodyContent
               input.form-control(
                 name='userContact',
                 id='userContact'
-                type='userContact', 
+                type='email', 
                 aria-describedby='userContactHelp',
                 data-check='userContact')
               .invalid-feedback El email o  teléfono es requerido
@@ -41,6 +41,7 @@ block bodyContent
               name='message',
               id='message'
               rows='4', cols='50', 
+              maxlength="600",
               aria-describedby='messageHelp',
               data-check='message')
             .invalid-feedback El mensaje es requerido
