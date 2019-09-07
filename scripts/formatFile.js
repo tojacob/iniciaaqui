@@ -18,7 +18,7 @@ class FormatFile {
   applyFormat(content) {
     // Titles
     content = content.replace(/capítulo\s\d/gi, str => {
-      return '<h2>' + str + '</h2> + <hr/>';
+      return '<h2>' + str + '</h2>' + '<hr/>';
     });
 
     // Subtitles
