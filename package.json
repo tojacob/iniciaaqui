@@ -7,9 +7,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "pre": "npx gulp pre",
-    "dev": "npx gulp dev",
-    "prod": "npx gulp prod"
+    "pre": "gulp pre",
+    "dev": "gulp dev",
+    "prod": "gulp prod",
+    "firebase:login": "firebase login",
+    "deploy:hosting": "firebase deploy --only hosting"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -18,11 +20,12 @@
     "browser-sync": "^2.26.7",
     "cssnano": "^4.1.10",
     "del": "^3.0.0",
+    "firebase-tools": "^8.14.1",
     "gulp": "4.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-postcss": "^8.0.0",
     "gulp-pug": "^4.0.1",
-    "gulp-sass": "^4.0.2",
+    "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
     "pump": "^3.0.0",
